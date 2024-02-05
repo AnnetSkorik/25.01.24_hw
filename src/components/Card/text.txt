@@ -1,0 +1,47 @@
+import React, { useState, useEffect } from 'react';
+
+const RecipeComponent = () => {
+  const [recipe, setRecipe] = useState(null);
+  const [recipeId, setRecipeId] = useState(1);
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const response = await fetch(`https://dummyjson.com/recipes/${recipeId}`);
+        const data = await response.json();
+        setRecipe(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchRecipe();
+  }, [recipeId]);
+___________
+  const handlePreviousRecipe = () => {
+    if (recipeId > 1) {
+      setRecipeId(recipeId - 1);
+    }
+  };
+
+  const handleNextRecipe = () => {
+    setRecipeId(recipeId + 1);
+  };
+
+  if (!recipe) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h2>{recipe.title}</h2>
+      <p>{recipe.description}</p>
+      {/* Отображение остальных данных рецепта */}
+      <button onClick={handlePreviousRecipe}>Previous</button>
+      <button onClick={handleNextRecipe}>Next</button>
+    </div>
+  );
+};
+
+export default RecipeComponent;
+
